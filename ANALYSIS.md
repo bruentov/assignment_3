@@ -226,7 +226,6 @@ memory was not measured (only the `O(n+m)` analytical bound is claimed).
 * **AI tool:** Claude (Anthropic) generated the implementation, the test-suite, the benchmark script and the first draft of this
   document in response to my request to solve the assignment. All numbers in this file come from running the included scripts in
   the AI's sandbox environment (Python 3.12.3).
-* **My own verification:** *(fill in truthfully before submitting – e.g. which commands you re-ran on your own machine, what you
-  read and checked, what you changed. Per the assignment text you are responsible for correctness and originality, and
-  only tests and measurements you actually performed may be reported; if you re-run the benchmark yourself, replace §9 with
-  your own hardware and numbers.)*
+* **My own verification:** I read the code and this analysis and ran the GitHub Actions public checks
+  in my repository (all passed). I did not re-run the benchmark; the timings in section 9 were
+  measured in the AI's sandbox environment.
