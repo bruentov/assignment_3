@@ -1,0 +1,88 @@
+== DSU ==
+PASS dsu spec example
+PASS dsu n=0
+PASS dsu n=1 self-union (largest stays 1)
+PASS dsu repeated unions
+PASS dsu no operations
+PASS dsu merge two big comps (rank!=size trap)
+== Kruskal / Prim ==
+PASS kruskal spec example (cost 5, 2 comps)
+PASS kruskal n=0
+PASS kruskal isolated vertices only
+PASS kruskal self-loops with negative weight ignored
+PASS kruskal parallel edges pick weight 3
+PASS kruskal total beyond 32 bits (4e9)
+PASS kruskal negative total -3e9
+PASS prim spec example (cost 5, 2 comps)
+PASS prim n=0
+PASS prim isolated vertices only
+PASS prim self-loops with negative weight ignored
+PASS prim parallel edges pick weight 3
+PASS prim total beyond 32 bits (4e9)
+PASS prim negative total -3e9
+== SCC ==
+PASS scc spec example
+PASS scc spec example semantic
+PASS scc n=0
+PASS scc isolates are separate SCCs
+PASS scc self-loop + duplicate cross edges dedup'd
+== Topological order ==
+PASS topo spec example
+PASS topo n=0
+PASS topo self-loop is a cycle
+PASS topo 2-cycle
+PASS topo diamond + shortcut + duplicate edge (finished-vertex edge is NOT a cycle)
+PASS topo cycle in a later component is found
+== DAG shortest paths ==
+PASS dag spec example
+PASS dag n=1
+PASS dag cycle unreachable from source still rejected
+PASS dag self-loop is cyclic
+PASS dag never relaxes from unreachable vertex (1->2 weight -100 ignored)
+PASS dag finite distance -1 is not 'unreachable'
+PASS dag distance beyond 32 bits (2e9), source not vertex 0
+== Route helper ==
+PASS route reachable 0->3 == [0,1,2,3]
+PASS route weight along path == distance (0)
+PASS route to source == [source]
+PASS route to unreachable vertex 4 == [] (documented)
+PASS route with tied/parallel edges (selected id 0, route [0, 1])
+PASS tied/parallel dag witness valid
+== Checker sanity: accepts alternative valid answers, rejects invalid witnesses ==
+PASS msf accepts ids [1,2]
+PASS msf accepts alternative order [2,1]
+PASS msf rejects suboptimal forest {0,1}
+PASS msf rejects wrong cost claim
+PASS msf rejects cycle edges
+PASS scc accepts labels [9,9,2]
+PASS scc rejects merged labels
+PASS scc rejects missing condensation edge
+PASS scc rejects duplicate condensation pair
+PASS topo accepts [0,1,2,3]
+PASS topo rejects [2,0,1,3]
+PASS dag accepts the spec answer
+PASS dag rejects non-tight parent edge
+PASS dag rejects parent edge not ending at vertex
+== Randomized differential tests (seeded) ==
+PASS 400 random small instances: all six methods vs brute-force oracles
+== State reset: mixed requests repeated in ONE process ==
+PASS three further repeats identical to first pass
+== Large inputs at published limits ==
+PASS dsu n=1e5 q=250000 [0.60s incl. request JSON round-trip]
+PASS kruskal n=1e5 m=250000 random weights ±1e9 [0.60s incl. request JSON round-trip]
+PASS prim    n=1e5 m=250000 random weights ±1e9 [1.84s incl. request JSON round-trip]
+PASS kruskal and prim agree on cost and components at scale
+PASS scc random n=1e5 m=250000 (vs independent iterative Tarjan) [1.68s incl. request JSON round-trip]
+PASS scc deep chain n=1e5 (all singletons) [0.39s incl. request JSON round-trip]
+PASS scc one huge cycle n=1e5 (single SCC) [0.32s incl. request JSON round-trip]
+PASS topo deep chain n=1e5 [0.09s incl. request JSON round-trip]
+PASS topo chain closed into a ring (cycle at depth 1e5) [0.08s incl. request JSON round-trip]
+PASS topo reversed deep chain n=1e5 [0.15s incl. request JSON round-trip]
+PASS dag chain n=1e5 weights -1e9 (distance -9.9999e13) [0.18s incl. request JSON round-trip]
+PASS dag random DAG n=1e5 m≈250000 (vs index-order DP + witness check) [1.04s incl. request JSON round-trip]
+PASS dag cycle hidden far from the source [0.34s incl. request JSON round-trip]
+== End-to-end through main.py (stdin/stdout), batch twice in one process ==
+PASS CLI returns one line per request, stdout clean
+PASS CLI second pass equals first pass
+
+75 passed, 0 failed
